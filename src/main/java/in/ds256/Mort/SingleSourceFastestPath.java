@@ -17,7 +17,6 @@ import java.util.*;
 import java.io.IOException;
 
 /**
- * 
 "Finds all fastest paths from a selected vertex also taking care of parking vertices!"
 */
 
@@ -42,36 +41,38 @@ public class SingleSourceFastestPath extends BasicComputation<
   @Override
   public void compute(Vertex<LongWritable, Text, Text> vertex,Iterable<DoubleWritable> messages) throws IOException {
     if (getSuperstep() == 0) {
-      String vValues[] = vertex.getValue().toString().split("!");	//Convert the text input of form "dist!parkingvertex" to string array
+      String vValues[] = vertex.getValue().get().toString().split("!");	//Convert the text input of form "dist!parkingvertex" to string array
       vVal[0]=Long.toString(Long.MAX_VALUE);				//set maximum distance to largest value in double
-      String newvalue = vVal[0]+"!"+vVal[1];
-      String newVar;//Set the computed value back to some string
-      vertex.setValue(new Text(newvalue));				//Set the values into a new Text Object
+      String newvalue = vVal[0]+"!"+vVal[1];                //Set the computed value back to some string
+      vertex.setValue(new Text(newValue));				//Set the values into a new Text Object
     }
 
-    minDist = isSource(vertex) ? :0 : Long.MAX_VALUE; //only for source vertex, distance is 0, all other remain inf
-    for (DoubleWritable message : messages) {
-      minDist = Math.min(minDist, message.get());		//everytime you receive msgs, ensure that only minimum is assigned as to dist for current vertex
+    long minDist = isSource(vertex) ? : 0 : Long.MAX_VALUE; //only for source vertex, distance is 0, all other remain inf
+    for (LongWritable message : messages) {
+      minDist = Math.min(minDist, message.get());		//everytime you receive msgs, ensure that only minimum is assigned as dist for current vertex
     }
-      LOG.info("Vertex " + vertex.getId() + " got minDist = " + minDist + " vertex value = " + vertex.getValue());
+
+    LOG.info("Vertex " + vertex.getId() + " got minDist = " + minDist + " vertex value = " + vertex.getValue());
 
     //   vertex.getValue() will be used for parking vertex
-
-    if (minDist < vertex.getValue().get()) {
-      vertex.setValue(new DoubleWritable(minDist));
-      for (Edge<LongWritable, Text> edge : vertex.getEdges()) {
-	String e[] = edge.getValue().toString().split("!");
-        System.out.println("length of vertex "+vertex.getId()+" is "+e.length);
-        // adding
-              Double temp = new Double(minDist);
-              int tim = ((temp.intValue())/6)%3;
-              double d = Integer.parseInt(e[tim]);
-       //done 
-	
-        double distance = minDist + d; //Double.parseDouble(edge.getValue().get().toString());
-        LOG.info("Vertex " + vertex.getId() + " sent to " + edge.getTargetVertexId() + " = " + distance);
-        sendMessage(edge.getTargetVertexId(), new LongWritable(distance));
-      }
+    String vertexVal[] = vertex.getValue().get().toString().split("!");
+    long compDist = Long.parseLong(vertexVal[0]);
+    if (minDist < compDist) {
+        vertexVal[0] = Long.toString(minDist);
+        String newVertexVal = vertexVal[0] + "!" + vertexVal[1];
+        vertex.setValue(new Text(newVertexVal));
+        for (Edge<LongWritable, Text> edge : vertex.getEdges()) {
+	        String e[] = edge.getValue().get().toString().split("!");
+            System.out.println("length of vertex "+vertex.getId()+" is "+e.length);
+            // adding
+            long temp = minDist;
+            int timeSlot = (((int)temp)/60)%24;
+            long d = Long.parseLong(e[timeSlot]);
+            //done
+            long distance = minDist + d; //Double.parseDouble(edge.getValue().get().toString());
+            LOG.info("Vertex " + vertex.getId() + " sent to " + edge.getTargetVertexId() + " = " + distance);
+            sendMessage(edge.getTargetVertexId(), new LongWritable(distance));
+        }
     }
     vertex.voteToHalt();
   }
