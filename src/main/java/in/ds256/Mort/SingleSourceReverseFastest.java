@@ -45,7 +45,7 @@ public class SingleSourceReverseFastest extends BasicComputation<
         }
         long minWait = 10;                                       //The minimum waiting time is used only for parking vertices
         long tD = 100;
-        long minDist = isSource(vertex) ? tD : 0; //only for source vertex, distance is 0, all other remain inf
+        long minDist = isSource(vertex) ? 100 : 0; //only for source vertex, distance is 0, all other remain inf
         for (LongWritable message : messages) {
             minDist = Math.max(minDist, message.get());		//everytime you receive msgs, ensure that only minimum is assigned as dist for current vertex
         }
@@ -56,7 +56,7 @@ public class SingleSourceReverseFastest extends BasicComputation<
         String vertexVal[] = vertex.getValue().toString().split("!");
         long compDist = Long.parseLong(vertexVal[1]);
         boolean parkingVertex = vertexVal[2].equals("1") ? true : false;    //check if current vertex is parking vertex
-        if (minDist < compDist) {
+        if (minDist > compDist) {
             vertexVal[0] = Long.toString(minDist);
             String newVertexVal = vertexVal[0] + "!" + vertexVal[1]+ "!" + vertexVal[2];
             vertex.setValue(new Text(newVertexVal));
