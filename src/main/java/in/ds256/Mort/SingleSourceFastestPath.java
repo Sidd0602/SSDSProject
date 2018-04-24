@@ -47,7 +47,7 @@ public class SingleSourceFastestPath extends BasicComputation<
       vertex.setValue(new Text(newValue));				//Set the values into a new Text Object
     }
 
-    long minDist = isSource(vertex) ? : 0 : Long.MAX_VALUE; //only for source vertex, distance is 0, all other remain inf
+    long minDist = isSource(vertex) ? 0 : Long.MAX_VALUE; //only for source vertex, distance is 0, all other remain inf
     for (LongWritable message : messages) {
       minDist = Math.min(minDist, message.get());		//everytime you receive msgs, ensure that only minimum is assigned as dist for current vertex
     }
