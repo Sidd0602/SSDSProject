@@ -1,0 +1,39 @@
+create database FAA_OTP;
+
+CREATE TABLE `FAA_OTP`.`Vertex` (
+  `vertexId` INT NOT NULL,
+  `vertexName` VARCHAR(45) NULL,
+  `vertexStartTime` INT NULL,
+  `vertexStartTimeDate` DATETIME NULL,
+  `vertexType` VARCHAR(45) NULL,
+  PRIMARY KEY (`vertexId`));
+  
+CREATE TABLE `FAA_OTP`.`IndexForK` (
+  `vertexId` INT NOT NULL,
+  `destVertexId` VARCHAR(45) NULL,
+  `indexType` VARCHAR(45) NULL,
+  FOREIGN KEY (`vertexId`) REFERENCES Vertex(`vertexId`));
+  
+CREATE TABLE `FAA_OTP`.`IndexForK2` (
+  `vertexId` INT NOT NULL,
+  `destVertexId` VARCHAR(45) NULL,
+  `indexType` VARCHAR(45) NULL,
+  FOREIGN KEY (`vertexId`) REFERENCES Vertex(`vertexId`));
+  
+CREATE TABLE `FAA_OTP`.`IndexForK3` (
+  `vertexId` INT NOT NULL,
+  `destVertexId` VARCHAR(45) NULL,
+  `indexType` VARCHAR(45) NULL,
+  FOREIGN KEY (`vertexId`) REFERENCES Vertex(`vertexId`));
+  
+CREATE TABLE `FAA_OTP`.`IndexForK4` (
+  `vertexId` INT NOT NULL,
+  `destVertexId` VARCHAR(45) NULL,
+  `indexType` VARCHAR(45) NULL,
+  FOREIGN KEY (`vertexId`) REFERENCES Vertex(`vertexId`));
+  
+CREATE TABLE `FAA_OTP`.`IndexForK5` (
+  `vertexId` INT NOT NULL,
+  `destVertexId` VARCHAR(45) NULL,
+  `indexType` VARCHAR(45) NULL,
+  FOREIGN KEY (`vertexId`) REFERENCES Vertex(`vertexId`));
