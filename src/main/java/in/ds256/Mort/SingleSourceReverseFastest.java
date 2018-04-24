@@ -37,5 +37,45 @@ public class SingleSourceReverseFastest extends BasicComputation<
 
     @Override
     public void compute(Vertex<LongWritable, Text, Text> vertex,Iterable<LongWritable> messages) throws IOException {
+        if (getSuperstep() == 0) {
+            String vValues[] = vertex.getValue().toString().split("!");	//Convert the text input of form "dist!parkingvertex" to string array
+            vValues[1]=Long.toString(0);				//set maximum distance to largest value in double
+            String newValue = vValues[0]+"!"+vValues[1]+"!"+vValues[2];                //Set the computed value back to some string
+            vertex.setValue(new Text(newValue));				//Set the values into a new Text Object
+        }
+        long minWait = 10;                                       //The minimum waiting time is used only for parking vertices
+        long tD = 100000;
+        long minDist = isSource(vertex) ? tD : 0; //only for source vertex, distance is 0, all other remain inf
+        for (LongWritable message : messages) {
+            minDist = Math.max(minDist, message.get());		//everytime you receive msgs, ensure that only minimum is assigned as dist for current vertex
+        }
+
+        LOG.info("Vertex " + vertex.getId() + " got minDist = " + minDist + " vertex value = " + vertex.getValue());
+
+        //   vertex.getValue() will be used for parking vertex
+        String vertexVal[] = vertex.getValue().toString().split("!");
+        long compDist = Long.parseLong(vertexVal[1]);
+        boolean parkingVertex = vertexVal[2].equals("1") ? true : false;    //check if current vertex is parking vertex
+        if (minDist < compDist) {
+            vertexVal[0] = Long.toString(minDist);
+            String newVertexVal = vertexVal[0] + "!" + vertexVal[1]+ "!" + vertexVal[2];
+            vertex.setValue(new Text(newVertexVal));
+            for (Edge<LongWritable, Text> edge : vertex.getEdges()) {
+                String e[] = edge.getValue().toString().split("!");
+                //System.out.println("length of vertex "+vertex.getId()+" is "+e.length);
+                // adding
+                long temp = minDist;
+                int timeSlot = (((int)temp)/60)%24;
+                long d = Long.parseLong(e[timeSlot]);
+                //done
+                long distance = minDist - d; //Double.parseDouble(edge.getValue().get().toString());
+                if (parkingVertex) {
+                    distance = distance - minWait;
+                }
+                LOG.info("Vertex " + vertex.getId() + " sent to " + edge.getTargetVertexId() + " = " + distance);
+                sendMessage(edge.getTargetVertexId(), new LongWritable(distance));
+            }
+        }
+        vertex.voteToHalt();
     }
 }

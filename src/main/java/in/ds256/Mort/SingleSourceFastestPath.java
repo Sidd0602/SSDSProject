@@ -52,7 +52,7 @@ public class SingleSourceFastestPath extends BasicComputation<
       minDist = Math.min(minDist, message.get());		//everytime you receive msgs, ensure that only minimum is assigned as dist for current vertex
     }
 
-    LOG.info("Vertex " + vertex.getId() + " got minDist = " + minDist + " vertex value = " + vertex.getValue());
+    //LOG.info("Vertex " + vertex.getId() + " got minDist = " + minDist + " vertex value = " + vertex.getValue());
 
     //   vertex.getValue() will be used for parking vertex
     String vertexVal[] = vertex.getValue().toString().split("!");
@@ -74,7 +74,7 @@ public class SingleSourceFastestPath extends BasicComputation<
             if (parkingVertex) {
                 distance = distance + minWait;
             }
-            LOG.info("Vertex " + vertex.getId() + " sent to " + edge.getTargetVertexId() + " = " + distance);
+            //LOG.info("Vertex " + vertex.getId() + " sent to " + edge.getTargetVertexId() + " = " + distance);
             sendMessage(edge.getTargetVertexId(), new LongWritable(distance));
         }
     }
