@@ -44,8 +44,9 @@ public class SingleSourceFastestPath extends BasicComputation<
     if (getSuperstep() == 0) {
       String vValues[] = vertex.getValue().toString().split("!");	//Convert the text input of form "dist!parkingvertex" to string array
       vVal[0]=Long.toString(Long.MAX_VALUE);				//set maximum distance to largest value in double
-      String newValue = vVal[0]+"!"+vVal[1];				//Set the computed value back to some string		
-      vertex.setValue(new Text(newValue));				//Set the values into a new Text Object
+      String newvalue = vVal[0]+"!"+vVal[1];
+      String newVar;//Set the computed value back to some string
+      vertex.setValue(new Text(newvalue));				//Set the values into a new Text Object
     }
 
     minDist = isSource(vertex) ? :0 : Long.MAX_VALUE; //only for source vertex, distance is 0, all other remain inf
