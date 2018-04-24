@@ -21,7 +21,7 @@ public class SingleSourceReverseFastest extends BasicComputation<
         LongWritable, Text, Text, LongWritable> {
     /** The shortest paths id */
     public static final LongConfOption SOURCE_ID =
-            new LongConfOption("SingleSourceReverseFastest.sourceId", 12 , "The shortest paths id");       //386896 is new Destination Vertex
+            new LongConfOption("SingleSourceReverseFastest.sourceId", 5 , "The shortest paths id");       //386896 is new Destination Vertex
     /** Class logger */
     private static final Logger LOG = Logger.getLogger(SingleSourceFastestPath.class);
 
@@ -44,13 +44,13 @@ public class SingleSourceReverseFastest extends BasicComputation<
             vertex.setValue(new Text(newValue));				//Set the values into a new Text Object
         }
         long minWait = 10;                                       //The minimum waiting time is used only for parking vertices
-        long tD = 100000;
+        long tD = 100;
         long minDist = isSource(vertex) ? tD : 0; //only for source vertex, distance is 0, all other remain inf
         for (LongWritable message : messages) {
             minDist = Math.max(minDist, message.get());		//everytime you receive msgs, ensure that only minimum is assigned as dist for current vertex
         }
 
-        LOG.info("Vertex " + vertex.getId() + " got minDist = " + minDist + " vertex value = " + vertex.getValue());
+        //LOG.info("Vertex " + vertex.getId() + " got minDist = " + minDist + " vertex value = " + vertex.getValue());
 
         //   vertex.getValue() will be used for parking vertex
         String vertexVal[] = vertex.getValue().toString().split("!");
@@ -72,7 +72,7 @@ public class SingleSourceReverseFastest extends BasicComputation<
                 if (parkingVertex) {
                     distance = distance - minWait;
                 }
-                LOG.info("Vertex " + vertex.getId() + " sent to " + edge.getTargetVertexId() + " = " + distance);
+          //      LOG.info("Vertex " + vertex.getId() + " sent to " + edge.getTargetVertexId() + " = " + distance);
                 sendMessage(edge.getTargetVertexId(), new LongWritable(distance));
             }
         }
