@@ -24,7 +24,7 @@ public class SingleSourceFastestPath extends BasicComputation<
     LongWritable, Text, Text, LongWritable> {
   /** The shortest paths id */
   public static final LongConfOption SOURCE_ID =
-      new LongConfOption("SingleSourceFastestPath.sourceId", 386896, "The shortest paths id");       //386896 is new Source Vertex
+      new LongConfOption("SingleSourceFastestPath.sourceId", 51620, "The shortest paths id");       //386896 is new Source Vertex
   /** Class logger */
   private static final Logger LOG = Logger.getLogger(SingleSourceFastestPath.class);
 
