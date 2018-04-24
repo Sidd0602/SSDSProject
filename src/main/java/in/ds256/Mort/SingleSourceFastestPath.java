@@ -57,7 +57,7 @@ public class SingleSourceFastestPath extends BasicComputation<
     //   vertex.getValue() will be used for parking vertex
     String vertexVal[] = vertex.getValue().toString().split("!");
     long compDist = Long.parseLong(vertexVal[0]);
-    boolean parkingVertex = vertexVal[1].equals("1") ? true : false;
+    boolean parkingVertex = vertexVal[2].equals("1") ? true : false;    //check if current vertex is parking vertex
     if (minDist < compDist) {
         vertexVal[0] = Long.toString(minDist);
         String newVertexVal = vertexVal[0] + "!" + vertexVal[1];
