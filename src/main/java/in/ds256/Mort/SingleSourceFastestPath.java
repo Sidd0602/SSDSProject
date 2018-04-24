@@ -64,7 +64,7 @@ public class SingleSourceFastestPath extends BasicComputation<
         vertex.setValue(new Text(newVertexVal));
         for (Edge<LongWritable, Text> edge : vertex.getEdges()) {
 	        String e[] = edge.getValue().toString().split("!");
-            System.out.println("length of vertex "+vertex.getId()+" is "+e.length);
+            //System.out.println("length of vertex "+vertex.getId()+" is "+e.length);
             // adding
             long temp = minDist;
             int timeSlot = (((int)temp)/60)%24;
