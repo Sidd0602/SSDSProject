@@ -21,7 +21,7 @@ import java.io.IOException;
 */
 
 public class SingleSourceFastestPath extends BasicComputation<
-    LongWritable, Text, Text, DoubleWritable> {
+    LongWritable, Text, Text, LongWritable> {
   /** The shortest paths id */
   public static final LongConfOption SOURCE_ID =
       new LongConfOption("SingleSourceFastestPath.sourceId", 1, "The shortest paths id");
@@ -39,11 +39,11 @@ public class SingleSourceFastestPath extends BasicComputation<
   }
 
   @Override
-  public void compute(Vertex<LongWritable, Text, Text> vertex,Iterable<DoubleWritable> messages) throws IOException {
+  public void compute(Vertex<LongWritable, Text, Text> vertex,Iterable<LongWritable> messages) throws IOException {
     if (getSuperstep() == 0) {
-      String vValues[] = vertex.getValue().get().toString().split("!");	//Convert the text input of form "dist!parkingvertex" to string array
-      vVal[0]=Long.toString(Long.MAX_VALUE);				//set maximum distance to largest value in double
-      String newvalue = vVal[0]+"!"+vVal[1];                //Set the computed value back to some string
+      String vValues[] = vertex.getValue().toString().split("!");	//Convert the text input of form "dist!parkingvertex" to string array
+      vValues[0]=Long.toString(Long.MAX_VALUE);				//set maximum distance to largest value in double
+      String newValue = vValues[0]+"!"+vValues[1];                //Set the computed value back to some string
       vertex.setValue(new Text(newValue));				//Set the values into a new Text Object
     }
 
@@ -55,14 +55,14 @@ public class SingleSourceFastestPath extends BasicComputation<
     LOG.info("Vertex " + vertex.getId() + " got minDist = " + minDist + " vertex value = " + vertex.getValue());
 
     //   vertex.getValue() will be used for parking vertex
-    String vertexVal[] = vertex.getValue().get().toString().split("!");
+    String vertexVal[] = vertex.getValue().toString().split("!");
     long compDist = Long.parseLong(vertexVal[0]);
     if (minDist < compDist) {
         vertexVal[0] = Long.toString(minDist);
         String newVertexVal = vertexVal[0] + "!" + vertexVal[1];
         vertex.setValue(new Text(newVertexVal));
         for (Edge<LongWritable, Text> edge : vertex.getEdges()) {
-	        String e[] = edge.getValue().get().toString().split("!");
+	        String e[] = edge.getValue().toString().split("!");
             System.out.println("length of vertex "+vertex.getId()+" is "+e.length);
             // adding
             long temp = minDist;
