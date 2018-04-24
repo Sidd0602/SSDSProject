@@ -43,7 +43,7 @@ public class SingleSourceFastestPath extends BasicComputation<
     if (getSuperstep() == 0) {
       String vValues[] = vertex.getValue().toString().split("!");	//Convert the text input of form "dist!parkingvertex" to string array
       vValues[0]=Long.toString(Long.MAX_VALUE);				//set maximum distance to largest value in double
-      String newValue = vValues[0]+"!"+vValues[1];                //Set the computed value back to some string
+      String newValue = vValues[0]+"!"+vValues[1]+"!"+vValues[2];                //Set the computed value back to some string
       vertex.setValue(new Text(newValue));				//Set the values into a new Text Object
     }
     long minWait = 10;                                       //The minimum waiting time is used only for parking vertices
@@ -60,7 +60,7 @@ public class SingleSourceFastestPath extends BasicComputation<
     boolean parkingVertex = vertexVal[2].equals("1") ? true : false;    //check if current vertex is parking vertex
     if (minDist < compDist) {
         vertexVal[0] = Long.toString(minDist);
-        String newVertexVal = vertexVal[0] + "!" + vertexVal[1];
+        String newVertexVal = vertexVal[0] + "!" + vertexVal[1]+ "!" + vertexVal[2];
         vertex.setValue(new Text(newVertexVal));
         for (Edge<LongWritable, Text> edge : vertex.getEdges()) {
 	        String e[] = edge.getValue().toString().split("!");
