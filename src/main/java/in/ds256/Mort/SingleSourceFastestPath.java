@@ -49,7 +49,7 @@ public class SingleSourceFastestPath extends BasicComputation<
     long minWait = 10;                                       //The minimum waiting time is used only for parking vertices
     long minDist = isSource(vertex) ? 0 : Long.MAX_VALUE; //only for source vertex, distance is 0, all other remain inf
     for (Text message : messages) {
-        String msgStr = message.get().toString();
+        String msgStr = message.toString();
         long msgVal = Long.parseLong(msgStr);
         minDist = Math.min(minDist, msgVal);		//everytime you receive msgs, ensure that only minimum is assigned as dist for current vertex
     }
