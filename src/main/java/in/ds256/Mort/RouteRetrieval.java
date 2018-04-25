@@ -16,12 +16,9 @@ import java.util.*;
 import java.io.IOException;
 
 
-/*
 public class RouteRetrieval extends BasicComputation<LongWritable, Text, Text, Text> {
-    */
-/** The shortest paths id *//*
-
-    public static final LongConfOption SOURCE_ID = new LongConfOption("RouteRetrieval.sourceId",1, "The shortest paths id");       //386896 is the sink to traverse back from.
+    /** The shortest paths id */
+    public static final LongConfOption SOURCE_ID = new LongConfOption("RouteRetrieval.sourceId",5, "The shortest paths id");       //386896 is the sink to traverse back from.
     private static final Logger LOG = Logger.getLogger(RouteRetrieval.class);
 
     private boolean isDestination(Vertex<LongWritable, ?, ?> vertex) {
@@ -30,10 +27,11 @@ public class RouteRetrieval extends BasicComputation<LongWritable, Text, Text, T
 
     @Override
     public void compute(Vertex<LongWritable, Text, Text> vertex,Iterable<Text> messages) throws IOException {
+        int tmin = 10;
         if (getSuperstep() == 0) {
             if (isDestination(vertex)) {
                 String vValues[] = vertex.getValue().toString().split("!");
-                String cValues[] = vValues[4].split("#");
+                String cValues[] = vValues[3].split("#");
                 String eachC[] = cValues[0].split("@");
                 String leastRecord = cValues[0];
                 long leastCost = Long.parseLong(eachC[0]);
@@ -50,7 +48,7 @@ public class RouteRetrieval extends BasicComputation<LongWritable, Text, Text, T
             }
         } else {
             String vValues[] = vertex.getValue().toString().split("!");
-            String cValues[] = vValues[4].split("#");
+            String cValues[] = vValues[3].split("#");
             String eachC[] = cValues[0].split("@");
             String leastRecord = cValues[0];
             long leastCost = Long.parseLong(eachC[0]);
@@ -62,22 +60,31 @@ public class RouteRetrieval extends BasicComputation<LongWritable, Text, Text, T
                     for (int i = 1; i < cValues.length ; i++) {
                         String c[] = cValues[i].split("@");
                         if (Integer.parseInt(c[1]) <= time) {
-                            if (Long.parseLong(c[0]) < least) {
-                                least = Long.parseLong(c[0]);
+                            if (Long.parseLong(c[0]) < leastCost) {
+                                leastCost = Long.parseLong(c[0]);
                                 leastRecord = cValues[i];
                             }
                         }
                     }
                 } else {
-
+                    for (int i = 1; i < cValues.length ; i++) {
+                        String c[] = cValues[i].split("@");
+                        if (Integer.parseInt(c[1]) <= (time-tmin)) {
+                            if (Long.parseLong(c[0]) < leastCost) {
+                                leastCost = Long.parseLong(c[0]);
+                                leastRecord = cValues[i];
+                            }
+                        }
+                    }
                 }
 
             }
+            String parseLeastRec[] = leastRecord.split("@");
+            long destId = Long.parseLong(parseLeastRec[2]);
+            sendMessage(destId,new Text(leastRecord));
         }
-
 
         vertex.voteToHalt();
     }
 }
 
-*/
