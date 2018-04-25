@@ -9,7 +9,7 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.json.JSONArray;
 import org.json.JSONException;
-
+import org.apache.giraph.io.formats.TextVertexOutputFormat;
 import java.io.IOException;
 
 public class JsonLongTextTextLongVertexOutputFormat extends TextVertexOutputFormat<LongWritable, Text, Text> {
