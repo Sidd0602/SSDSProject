@@ -12,6 +12,9 @@ import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.ArrayWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.log4j.Logger;
+import org.apache.giraph.job.GiraphJob;
+import org.apache.hadoop.util.ToolRunner;
+import org.apache.hadoop.fs.Path;
 import java.lang.*;
 import java.util.*;
 import java.io.IOException;
@@ -33,10 +36,9 @@ public class SingleSourceFastestPath extends BasicComputation<
    * @param vertex Vertex
    * @return True if the source id
    */
-  private boolean isSource(Vertex<LongWritable, ?, ?> vertex) {
-    return vertex.getId().get() == SOURCE_ID.get(getConf());
+  private boolean isSource() {
+      return (getVertexId().get() == getContext().getConfiguration().getLong(SOURCE_ID, SOURCE_ID_DEFAULT));
   }
-
   @Override
   public void compute(Vertex<LongWritable, Text, Text> vertex,Iterable<Text> messages) throws IOException {
     if (getSuperstep() == 0) {
