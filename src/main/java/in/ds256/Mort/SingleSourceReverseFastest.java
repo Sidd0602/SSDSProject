@@ -18,10 +18,10 @@ import java.io.IOException;
 
 
 public class SingleSourceReverseFastest extends BasicComputation<
-        LongWritable, Text, Text, LongWritable> {
+        LongWritable, Text, Text, Text> {
     /** The shortest paths id */
     public static final LongConfOption SOURCE_ID =
-            new LongConfOption("SingleSourceReverseFastest.sourceId", 386896 , "The shortest paths id");       //386896 is new Destination Vertex
+            new LongConfOption("SingleSourceReverseFastest.sourceId", 5 , "The shortest paths id");       //386896 is new Destination Vertex
     /** Class logger */
     private static final Logger LOG = Logger.getLogger(SingleSourceFastestPath.class);
 
@@ -36,7 +36,7 @@ public class SingleSourceReverseFastest extends BasicComputation<
     }
 
     @Override
-    public void compute(Vertex<LongWritable, Text, Text> vertex,Iterable<LongWritable> messages) throws IOException {
+    public void compute(Vertex<LongWritable, Text, Text> vertex,Iterable<Text> messages) throws IOException {
         if (getSuperstep() == 0) {
             String vValues[] = vertex.getValue().toString().split("!");	//Convert the text input of form "dist!parkingvertex" to string array
             vValues[1]=Long.toString(0);				//set maximum distance to largest value in double
@@ -44,10 +44,12 @@ public class SingleSourceReverseFastest extends BasicComputation<
             vertex.setValue(new Text(newValue));				//Set the values into a new Text Object
         }
         long minWait = 10;                                       //The minimum waiting time is used only for parking vertices
-        long tD= 1000000;
+        long tD= 300;
         long maxDist = isSource(vertex) ? tD : 0; //only for source vertex, distance is 0, all other remain inf
-        for (LongWritable message : messages) {
-            maxDist = Math.max(maxDist, message.get());		//everytime you receive msgs, ensure that only minimum is assigned as dist for current vertex
+        for (Text message : messages) {
+            String msgStr = message.toString();
+            long msgVal = Long.parseLong(msgStr);
+            maxDist = Math.max(maxDist, msgVal);		//everytime you receive msgs, ensure that only minimum is assigned as dist for current vertex
         }
         //LOG.info("Vertex " + vertex.getId() + " got minDist = " + minDist + " vertex value = " + vertex.getValue());
 
@@ -71,8 +73,9 @@ public class SingleSourceReverseFastest extends BasicComputation<
                 if (parkingVertex) {
                     distance = distance - minWait;
                 }
+                String dist = Long.toString(distance);
                 //      LOG.info("Vertex " + vertex.getId() + " sent to " + edge.getTargetVertexId() + " = " + distance);
-                sendMessage(edge.getTargetVertexId(), new LongWritable(distance));
+                sendMessage(edge.getTargetVertexId(), new Text(dist));
             }
         }
         vertex.voteToHalt();
