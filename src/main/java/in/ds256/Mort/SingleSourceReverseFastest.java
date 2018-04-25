@@ -23,7 +23,7 @@ public class SingleSourceReverseFastest extends BasicComputation<
     public static final LongConfOption SOURCE_ID =
             new LongConfOption("SingleSourceReverseFastest.sourceId", 5 , "The shortest paths id");       //386896 is new Destination Vertex
     /** Class logger */
-    private static final Logger LOG = Logger.getLogger(SingleSourceFastestPath.class);
+    private static final Logger LOG = Logger.getLogger(SingleSourceReverseFastest.class);
 
     /**
      * Is this vertex the source id?
