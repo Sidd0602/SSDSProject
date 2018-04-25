@@ -43,7 +43,7 @@ public class JsonLongTextTextLongVertexOutputFormat extends TextVertexOutputForm
                     jsonEdgeArray.put(jsonEdge);
                 }
                 jsonVertex.put(jsonEdgeArray);
-            } catch (JSONException e) {
+            } catch (Exception e) {
                 throw new IllegalArgumentException(
                         "writeVertex: Couldn't write vertex " + vertex);
             }
