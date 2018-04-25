@@ -16,14 +16,14 @@ public class JsonLongTextTextLongVertexOutputFormat extends TextVertexOutputForm
 
     @Override
     public TextVertexWriter createVertexWriter(TaskAttemptContext context) {
-        return new JsonLongDoubleFloatDoubleVertexWriter();
+        return new JsonLongTextTextLongVertexWriter();
     }
 
     /**
      * VertexWriter that supports vertices with <code>double</code>
      * values and <code>float</code> out-edge weights.
      */
-    private class JsonLongDoubleFloatDoubleVertexWriter extends TextVertexWriterToEachLine {
+    private class JsonLongTextTextLongVertexWriter extends TextVertexWriterToEachLine {
         @Override
         public Text convertVertexToLine(Vertex<LongWritable, Text, Text> vertex
         ) throws IOException {
