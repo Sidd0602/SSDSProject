@@ -39,7 +39,7 @@ public class SingleSourceFastestPath extends BasicComputation<
   }
 
   @Override
-  public void compute(Vertex<LongWritable, Text, Text> vertex,Iterable<LongWritable> messages) throws IOException {
+  public void compute(Vertex<LongWritable, Text, Text> vertex,Iterable<Text> messages) throws IOException {
     if (getSuperstep() == 0) {
       String vValues[] = vertex.getValue().toString().split("!");	//Convert the text input of form "dist!parkingvertex" to string array
       vValues[0]=Long.toString(Long.MAX_VALUE);				//set maximum distance to largest value in double
@@ -48,8 +48,10 @@ public class SingleSourceFastestPath extends BasicComputation<
     }
     long minWait = 10;                                       //The minimum waiting time is used only for parking vertices
     long minDist = isSource(vertex) ? 0 : Long.MAX_VALUE; //only for source vertex, distance is 0, all other remain inf
-    for (LongWritable message : messages) {
-      minDist = Math.min(minDist, message.get());		//everytime you receive msgs, ensure that only minimum is assigned as dist for current vertex
+    for (Text message : messages) {
+        String msgStr = message.get().toString();
+        long msgVal = Long.parseLong(msgStr);
+        minDist = Math.min(minDist, msgVal);		//everytime you receive msgs, ensure that only minimum is assigned as dist for current vertex
     }
 
     //LOG.info("Vertex " + vertex.getId() + " got minDist = " + minDist + " vertex value = " + vertex.getValue());
@@ -74,8 +76,9 @@ public class SingleSourceFastestPath extends BasicComputation<
             if (parkingVertex) {
                 distance = distance + minWait;
             }
+            String dist = Long.toString(distance);
             //LOG.info("Vertex " + vertex.getId() + " sent to " + edge.getTargetVertexId() + " = " + distance);
-            sendMessage(edge.getTargetVertexId(), new LongWritable(distance));
+            sendMessage(edge.getTargetVertexId(), new Text(dist));
         }
     }
     vertex.voteToHalt();
