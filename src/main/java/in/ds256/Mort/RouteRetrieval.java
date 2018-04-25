@@ -43,7 +43,7 @@ public class RouteRetrieval extends BasicComputation<LongWritable, Text, Text, T
                     }
                 }
                 String parseLeastRec[] = leastRecord.split("@");
-                long destId = Long.parseLong(parseLeastRec[2]);
+                LongWritable destId = new LongWritable (Long.parseLong(parseLeastRec[2]));
                 sendMessage(destId, new Text (leastRecord));
             }
         } else {
@@ -80,7 +80,7 @@ public class RouteRetrieval extends BasicComputation<LongWritable, Text, Text, T
 
             }
             String parseLeastRec[] = leastRecord.split("@");
-            long destId = Long.parseLong(parseLeastRec[2]);
+            LongWritable destId = new LongWritable (Long.parseLong(parseLeastRec[2]));
             sendMessage(destId,new Text(leastRecord));
         }
 
