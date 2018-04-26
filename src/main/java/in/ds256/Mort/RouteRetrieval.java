@@ -84,7 +84,7 @@ public class RouteRetrieval extends BasicComputation<LongWritable, Text, Text, T
             }
             String parseLeastRec[] = leastRecord.split("@");
             LongWritable destId = new LongWritable (Long.parseLong(parseLeastRec[2]));
-            LOG.info("Vertex " + vertex.getId() + " is visited now." + + "at SS# " + getSuperstep());
+            LOG.info("Vertex " + vertex.getId() + " is visited now." + "at SS# " + getSuperstep());
             if(destId != srcId) {
                 sendMessage(destId,new Text(leastRecord));
             }
