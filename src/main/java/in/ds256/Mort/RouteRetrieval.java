@@ -29,7 +29,7 @@ public class RouteRetrieval extends BasicComputation<LongWritable, Text, Text, T
     @Override
     public void compute(Vertex<LongWritable, Text, Text> vertex,Iterable<Text> messages) throws IOException {
         int tmin = 10;
-        long srcId = 1;
+        LongWritable srcId = new LongWritable(1);
         if (getSuperstep() == 0) {
             if (isDestination(vertex)) {
                 String vValues[] = vertex.getValue().toString().split("!");
@@ -85,7 +85,7 @@ public class RouteRetrieval extends BasicComputation<LongWritable, Text, Text, T
             String parseLeastRec[] = leastRecord.split("@");
             LongWritable destId = new LongWritable (Long.parseLong(parseLeastRec[2]));
             LOG.info("Vertex " + vertex.getId() + " is visited now." + + "at SS# " + getSuperstep());
-            if(destId.toLong() != srcId) {
+            if(destId != srcId) {
                 sendMessage(destId,new Text(leastRecord));
             }
 
