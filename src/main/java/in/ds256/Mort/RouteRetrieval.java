@@ -50,7 +50,7 @@ public class RouteRetrieval extends BasicComputation<LongWritable, Text, Text, T
             }
             LOG.info("Vertex " + vertex.getId() + " is visited now." + "at SS# " + getSuperstep());
         } else {
-            if(srcId == vertex.getId()) {
+            if(srcId.get() == vertex.getId().get()) {
                 LOG.info("Source found");
             }
             else
@@ -90,7 +90,7 @@ public class RouteRetrieval extends BasicComputation<LongWritable, Text, Text, T
                 String parseLeastRec[] = leastRecord.split("@");
                 LongWritable destId = new LongWritable(Long.parseLong(parseLeastRec[2]));
                 LOG.info("Vertex " + vertex.getId() + " is visited now." + "at SS# " + getSuperstep());
-                if (destId != srcId) {
+                if (destId.get() != srcId.get()) {
                     sendMessage(destId, new Text(leastRecord));
                 }
             }
