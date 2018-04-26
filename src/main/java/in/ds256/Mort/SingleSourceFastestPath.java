@@ -89,32 +89,5 @@ public class SingleSourceFastestPath extends BasicComputation<
     }
     vertex.voteToHalt();
   }
-/*
-    @Override
-    public int run(String[] argArray) throws Exception {
-        if (argArray.length != 4) {
-            throw new IllegalArgumentException(
-                    "run: Must have 4 arguments <input path> <output path> " +
-                            "<source vertex id> <# of workers>");
-        }
-        GiraphJob job = new GiraphJob(getConf(), getClass().getName());
-        job.setVertexClass(getClass());
-        job.setVertexInputFormatClass(
-                JsonLongTextTextLongVertexInputFormat.class);
-        job.setVertexOutputFormatClass(
-                JsonLongTextTextLongVertexOutputFormat.class);
-        FileInputFormat.addInputPath(job, new Path(argArray[0]));
-        FileOutputFormat.setOutputPath(job, new Path(argArray[1]));
-        job.getConfiguration().setLong(SingleSourceFastestPath.SOURCE_ID, Long.parseLong(argArray[2]));
-        job.setWorkerConfiguration(Integer.parseInt(argArray[3]), Integer.parseInt(argArray[3]), 100.0f);
-        if (job.run(true) == true) {
-            return 0;
-        } else {
-            return -1;
-        }
-    }
 
-    public static void main(String[] args) throws Exception {
-        System.exit(ToolRunner.run(new SingleSourceFastestPath(), args));
-    }*/
 }
