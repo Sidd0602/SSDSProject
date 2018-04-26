@@ -26,7 +26,7 @@ import java.io.IOException;
 public class SingleSourceFastestPath extends BasicComputation<
     LongWritable, Text, Text, Text> {
   /** The shortest paths id */
-  public static final LongConfOption SOURCE_ID = new LongConfOption("SingleSourceFastestPath.sourceId", args[0], "The shortest paths id");       //386896 is new Source Vertex
+  public static final LongConfOption SOURCE_ID = new LongConfOption("SingleSourceFastestPath.sourceId", 1, "The shortest paths id");       //386896 is new Source Vertex
   /** Class logger */
   private static final Logger LOG = Logger.getLogger(SingleSourceFastestPath.class);
 

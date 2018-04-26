@@ -1,5 +1,6 @@
 package in.ds256.Mort;
 
+import jdk.internal.jline.internal.Log;
 import org.apache.giraph.graph.BasicComputation;
 import org.apache.giraph.conf.LongConfOption;
 import org.apache.giraph.edge.Edge;
@@ -46,6 +47,7 @@ public class RouteRetrieval extends BasicComputation<LongWritable, Text, Text, T
                 LongWritable destId = new LongWritable (Long.parseLong(parseLeastRec[2]));
                 sendMessage(destId, new Text (leastRecord));
             }
+            LOG.info("Vertex " + vertex.getId() + " is visited now.");
         } else {
             String vValues[] = vertex.getValue().toString().split("!");
             String cValues[] = vValues[3].split("#");
@@ -81,6 +83,7 @@ public class RouteRetrieval extends BasicComputation<LongWritable, Text, Text, T
             }
             String parseLeastRec[] = leastRecord.split("@");
             LongWritable destId = new LongWritable (Long.parseLong(parseLeastRec[2]));
+            LOG.info("Vertex " + vertex.getId() + " is visited now.");
             sendMessage(destId,new Text(leastRecord));
         }
 
