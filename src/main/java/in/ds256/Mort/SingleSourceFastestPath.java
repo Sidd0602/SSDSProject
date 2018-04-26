@@ -26,7 +26,7 @@ import java.io.IOException;
 public class SingleSourceFastestPath extends BasicComputation<
     LongWritable, Text, Text, Text> {
   /** The shortest paths id */
-  //public static final LongConfOption SOURCE_ID = new LongConfOption("SingleSourceFastestPath.sourceId", 1, "The shortest paths id");       //386896 is new Source Vertex
+  public static final LongConfOption SOURCE_ID = new LongConfOption("SingleSourceFastestPath.sourceId", args[0], "The shortest paths id");       //386896 is new Source Vertex
   /** Class logger */
   private static final Logger LOG = Logger.getLogger(SingleSourceFastestPath.class);
 
@@ -36,9 +36,14 @@ public class SingleSourceFastestPath extends BasicComputation<
    * @param vertex Vertex
    * @return True if the source id
    */
-  private boolean isSource() {
+  /*private boolean isSource() {
       return (getVertexId().get() == getContext().getConfiguration().getLong(SOURCE_ID, SOURCE_ID_DEFAULT));
   }
+*/
+  private boolean isSource(Vertex<LongWritable, ?, ?> vertex) {
+        return vertex.getId().get() == SOURCE_ID.get(getConf());
+  }
+
   @Override
   public void compute(Vertex<LongWritable, Text, Text> vertex,Iterable<Text> messages) throws IOException {
     if (getSuperstep() == 0) {
@@ -84,7 +89,7 @@ public class SingleSourceFastestPath extends BasicComputation<
     }
     vertex.voteToHalt();
   }
-
+/*
     @Override
     public int run(String[] argArray) throws Exception {
         if (argArray.length != 4) {
@@ -111,5 +116,5 @@ public class SingleSourceFastestPath extends BasicComputation<
 
     public static void main(String[] args) throws Exception {
         System.exit(ToolRunner.run(new SingleSourceFastestPath(), args));
-    }
+    }*/
 }
