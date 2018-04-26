@@ -50,43 +50,49 @@ public class RouteRetrieval extends BasicComputation<LongWritable, Text, Text, T
             }
             LOG.info("Vertex " + vertex.getId() + " is visited now." + "at SS# " + getSuperstep());
         } else {
-            String vValues[] = vertex.getValue().toString().split("!");
-            String cValues[] = vValues[3].split("#");
-            String eachC[] = cValues[0].split("@");
-            String leastRecord = cValues[0];
-            long leastCost = Long.parseLong(eachC[0]);
-            for (Text message : messages) {
-                String msgData = message.toString();
-                String msgD[] = msgData.split("@");
-                int time = Integer.parseInt(msgD[1]);
-                if (vValues[2].equals("0")) {
-                    for (int i = 1; i < cValues.length ; i++) {
-                        String c[] = cValues[i].split("@");
-                        if (Integer.parseInt(c[1]) <= time) {
-                            if (Long.parseLong(c[0]) < leastCost) {
-                                leastCost = Long.parseLong(c[0]);
-                                leastRecord = cValues[i];
-                            }
-                        }
-                    }
-                } else {
-                    for (int i = 1; i < cValues.length ; i++) {
-                        String c[] = cValues[i].split("@");
-                        if (Integer.parseInt(c[1]) <= (time-tmin)) {
-                            if (Long.parseLong(c[0]) < leastCost) {
-                                leastCost = Long.parseLong(c[0]);
-                                leastRecord = cValues[i];
-                            }
-                        }
-                    }
-                }
-
+            if(srcId == vertex.getId()) {
+                LOG.info("Source found");
             }
-            String parseLeastRec[] = leastRecord.split("@");
-            LongWritable destId = new LongWritable (Long.parseLong(parseLeastRec[2]));
-            LOG.info("Vertex " + vertex.getId() + " is visited now." + "at SS# " + getSuperstep());
-            if(destId != srcId) {
-                sendMessage(destId,new Text(leastRecord));
+            else
+            {
+                String vValues[] = vertex.getValue().toString().split("!");
+                String cValues[] = vValues[3].split("#");
+                String eachC[] = cValues[0].split("@");
+                String leastRecord = cValues[0];
+                long leastCost = Long.parseLong(eachC[0]);
+                for (Text message : messages) {
+                    String msgData = message.toString();
+                    String msgD[] = msgData.split("@");
+                    int time = Integer.parseInt(msgD[1]);
+                    if (vValues[2].equals("0")) {
+                        for (int i = 1; i < cValues.length; i++) {
+                            String c[] = cValues[i].split("@");
+                            if (Integer.parseInt(c[1]) <= time) {
+                                if (Long.parseLong(c[0]) < leastCost) {
+                                    leastCost = Long.parseLong(c[0]);
+                                    leastRecord = cValues[i];
+                                }
+                            }
+                        }
+                    } else {
+                        for (int i = 1; i < cValues.length; i++) {
+                            String c[] = cValues[i].split("@");
+                            if (Integer.parseInt(c[1]) <= (time - tmin)) {
+                                if (Long.parseLong(c[0]) < leastCost) {
+                                    leastCost = Long.parseLong(c[0]);
+                                    leastRecord = cValues[i];
+                                }
+                            }
+                        }
+                    }
+
+                }
+                String parseLeastRec[] = leastRecord.split("@");
+                LongWritable destId = new LongWritable(Long.parseLong(parseLeastRec[2]));
+                LOG.info("Vertex " + vertex.getId() + " is visited now." + "at SS# " + getSuperstep());
+                if (destId != srcId) {
+                    sendMessage(destId, new Text(leastRecord));
+                }
             }
 
         }
